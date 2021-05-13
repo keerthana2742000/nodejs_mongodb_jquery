@@ -1,136 +1,114 @@
-$(function() {
+const express=require("express");
+const app=express();
+const mongoose=require("mongoose");
+const bodyParser=require('body-parser');
 
-	$("#username_error_message").hide();
-	$("#password_error_message").hide();
-	$("#retype_password_error_message").hide();
-	$("#email_error_message").hide();
 
-	var error_username = false;
-	var error_password = false;
-	var error_retype_password = false;
-	var error_email = false;
+app.use(bodyParser.urlencoded({extended:true}));
 
-	$("#form_username").focusout(function() {
+mongoose.connect("mongodb://localhost:27017",{useNewUrlParser:true},{useUnifiedTopology:true});
+let url="mongodb://localhost:27017";
+const database ={
+    name:String,
+    email:String,
+    password:String,
+    dob:String,
+    number:String
+}
 
-		check_username();
-		
-	});
+const data=mongoose.model("data",database);
 
-	$("#form_password").focusout(function() {
+app.get("/",function(req,res){
+    res.sendFile(__dirname+"/index.html");
+})
 
-		check_password();
-		
-	});
+app.post("/",function(req,res){
 
-	$("#form_retype_password").focusout(function() {
 
-		check_retype_password();
-		
-	});
+    let newData=new data({
+        name:req.body.name,
+        email:req.body.email,
+        password:req.body.pass,
+        dob:req.body.date,
+        number:req.body.number
+    })
+  // res.send(req.body);
+    mongoose.connect(url,function(err,db){
+        
+             // res.send(req.body);
+                db.collection("register").insertOne(newData,function(err,db){
+                  if(err)
+                  {
+                      throw err;
+                  }
+                   newData.save();
+                    console.log("inserted successfully");
+                 
+                })
+})
 
-	$("#form_email").focusout(function() {
+res.redirect("/login");
+}) 
 
-		check_email();
-		
-	});
+const dblogin ={
 
-	function check_username() {
-	
-		var username_length = $("#form_username").val().length;
-        if(username_length=="")
+    email:String,
+    password:String,
+    
+}
+
+
+const data1=mongoose.model("data1",dblogin);
+
+
+app.get("/login",function(req,res){
+    
+    res.sendFile(__dirname+"/login.html");
+    
+})
+
+app.post("/login",function(req,res){
+
+
+    let newDatalogin=new data1({
+        
+        email:req.body.email,
+        password:req.body.pass
+        
+
+    })
+
+
+mongoose.connect(url,function(err,db){
+    
+
+    let q={email:req.body.email,password:req.body.pass};
+    
+   db.collection("register").find(q).toArray(function(err,result){
+    
+        if(err)
+        throw err;
+
+        
+       
+        if(result.length>0)
         {
-            $("#username_error_message").html("*Enter name");
-			$("#username_error_message").show();
-        }
-		else if(username_length < 5 || username_length > 20) {
-			$("#username_error_message").html("*Should be between 5-20 characters");
-			$("#username_error_message").show();
-			error_username = true;
-		} else {
-			$("#username_error_message").hide();
-		}
-	
-	}
-
-	function check_password() {
-	
-		var password_length = $("#form_password").val().length;
-        if(password_length=="")
-        {
-            $("#password_error_message").html("*Enter password");
-			$("#password_error_message").show(); 
-        }
-		
-		else if(password_length < 8) {
-			$("#password_error_message").html("*At least 8 characters");
-			$("#password_error_message").show();
-			error_password = true;
-		} else {
-			$("#password_error_message").hide();
-		}
-	
-	}
-
-	function check_retype_password() {
-	
-		var password = $("#form_password").val();
-		var retype_password = $("#form_retype_password").val();
-		
-		if(password !=  retype_password) {
-			$("#retype_password_error_message").html("*Passwords don't match");
-			$("#retype_password_error_message").show();
-			error_retype_password = true;
-		} else {
-			$("#retype_password_error_message").hide();
-		}
-	
-	}
-
-	function check_email() {
-
-		var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
-        var mail = $("#form_email").val();
-        if(mail=="")
-        {
-            $("#email_error_message").html("*Enter mail id");
-			$("#email_error_message").show();
-            error_email=true;
+            
+            res.redirect("/profile");
 
         }
-	
-	else if(pattern.test($("#form_email").val()))
-         {
-		
-            $("#email_error_message").hide();
+        else{
+            res.redirect("/login");
+           
+        
+        }
+    })
+})
+})
+app.get("/profile",function(req,res){
+    res.sendFile(__dirname+"/profileset.html");
+})
 
-		 } 
-        else {
-			$("#email_error_message").html("*Invalid email address");
-			
-			$("#email_error_message").show();
-			error_email = true;
-		}
-	
-	}
-
-	$("#registration_form").submit(function() {
-											
-		error_username = false;
-		error_password = false;
-		error_retype_password = false;
-		error_email = false;
-											
-		check_username();
-		check_password();
-		check_retype_password();
-		check_email();
-		
-		if(error_username == false && error_password == false && error_retype_password == false && error_email == false) {
-			return true;
-		} else {
-			return false;	
-		}
-
-	});
-
-});
+app.listen(4000,function(){
+    console.log("server running");
+})

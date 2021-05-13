@@ -6,7 +6,7 @@
             
             background-color: pink;
             margin-top: 90px;
-            height: 400px;
+            height: 550px;
             border:black 1px solid;
         }
         span{
@@ -16,8 +16,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="icon" type="image/png" href="images/favicon.ico">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="app.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <title>Form Validation in jQuery</title>
 </head>
 
@@ -27,27 +27,39 @@
 
 <h1>REGISTRATION FORM</h1>
 
-<form id="registration_form" method="POST">
+<form id="registration_form" method="POST" action="/">
     <div class="form-group">
         <label for="form_username">Name</label>
-        <input type="text" class="form-control" id="form_username" placeholder="username">
+        <input type="text" class="form-control" id="form_username" name="name" placeholder="username">
         <span class="error_form" id="username_error_message"></span>
       </div>
       <div class="form-group">
         <label for="form_password">Password</label>
-        <input type="password" class="form-control" id="form_password" placeholder="Password">
+        <input type="password" class="form-control" id="form_password" name="pass" placeholder="Password">
         <span class="error_form" id="password_error_message"></span>
       </div>
       <div class="form-group">
         <label for="form_retype_password">Confirm Password</label>
-        <input type="password" class="form-control" id="form_retype_password" placeholder="Password">
+        <input type="password" class="form-control" id="form_retype_password" name="cpass" placeholder="Password">
         <span class="error_form" id="retype_password_error_message"></span>
       </div>
     <div class="form-group">
       <label for="form_email">Email address</label>
-      <input type="email" class="form-control" id="form_email" aria-describedby="emailHelp" placeholder="Email">
+      <input type="email" class="form-control" id="form_email" name="email" aria-describedby="emailHelp" placeholder="Email">
       <span class="error_form" id="email_error_message"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="form_date">DOB</label>
+      <input type="date" class="form-control" id="form_date" name="date">
+      <span class="error_form" id="dob_error_message"></span>
+    </div>
+    <div class="form-group">
+      <label for="form_number">Phone no</label>
+      <input type="tel" class="form-control" id="form_number" name="number" placeholder="Phone no">
+      <span class="error_form" id="phoneno_error_message"></span>
     </div><br>
+
     <input type="submit" class="sbmt_btn btn-success" value="Register">
     
     
@@ -56,6 +68,196 @@
 
 
 </div>
+<script>
+  $(function() {
+
+$("#username_error_message").hide();
+$("#password_error_message").hide();
+$("#retype_password_error_message").hide();
+$("#email_error_message").hide();
+$("#dob_error_message").hide();
+$("#phoneno_error_message").hide();
+
+var error_username = false;
+var error_password = false;
+var error_retype_password = false;
+var error_email = false;
+var error_date=false;
+var error_phoneno=false;
+
+$("#form_username").focusout(function() {
+
+  check_username();
+  
+});
+
+$("#form_password").focusout(function() {
+
+  check_password();
+  
+});
+
+$("#form_retype_password").focusout(function() {
+
+  check_retype_password();
+  
+});
+
+$("#form_email").focusout(function() {
+
+  check_email();
+  
+});
+$("#form_date").focusout(function() {
+
+check_date();
+
+});
+$("#form_number").focusout(function() {
+
+check_phoneno();
+
+});
+
+function check_username() {
+
+  var username_length = $("#form_username").val().length;
+      if(username_length=="")
+      {
+          $("#username_error_message").html("*Enter name");
+    $("#username_error_message").show();
+      }
+  else if(username_length < 5 || username_length > 20) {
+    $("#username_error_message").html("*Should be between 5-20 characters");
+    $("#username_error_message").show();
+    error_username = true;
+  } else {
+    $("#username_error_message").hide();
+  }
+
+}
+
+function check_password() {
+
+  var password_length = $("#form_password").val().length;
+      if(password_length=="")
+      {
+          $("#password_error_message").html("*Enter password");
+    $("#password_error_message").show(); 
+      }
+  
+  else if(password_length < 8) {
+    $("#password_error_message").html("*At least 8 characters");
+    $("#password_error_message").show();
+    error_password = true;
+  } else {
+    $("#password_error_message").hide();
+  }
+
+}
+
+function check_retype_password() {
+
+  var password = $("#form_password").val();
+  var retype_password = $("#form_retype_password").val();
+  
+  if(password !=  retype_password) {
+    $("#retype_password_error_message").html("*Passwords don't match");
+    $("#retype_password_error_message").show();
+    error_retype_password = true;
+  } else {
+    $("#retype_password_error_message").hide();
+  }
+
+}
+
+function check_email() {
+
+  var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+      var mail = $("#form_email").val();
+      if(mail=="")
+      {
+          $("#email_error_message").html("*Enter mail id");
+    $("#email_error_message").show();
+          error_email=true;
+
+      }
+
+else if(pattern.test($("#form_email").val()))
+       {
+  
+          $("#email_error_message").hide();
+
+   } 
+      else {
+    $("#email_error_message").html("*Invalid email address");
+    
+    $("#email_error_message").show();
+    error_email = true;
+  }
+
+}
+
+function check_date() {
+
+var username_length = $("#form_date").val().length;
+    if(username_length=="")
+    {
+        $("#dob_error_message").html("*Enter date");
+  $("#dob_error_message").show();
+    }
+    else {
+    $("#dob_error_message").hide();
+  }
+
+
+}
+
+function check_phoneno() {
+
+var phoneno_length = $("#form_number").val().length;
+var p=$("#form_number").val();
+
+  
+    if(!phoneno_length||phoneno_length<10 || isNaN(p))
+    {
+      $("#phoneno_error_message").html("*Invalid/Not entered");
+      $("#phoneno_error_message").show();
+    }
+    else {
+    $("#phoneno_error_message").hide();
+  }
+
+
+}
+
+
+$("#registration_form").submit(function() {
+                    
+  error_username = false;
+  error_password = false;
+  error_retype_password = false;
+  error_email = false;
+  error_date=false;
+  error_phoneno=false;
+                    
+  check_username();
+  check_password();
+  check_retype_password();
+  check_email();
+  check_date();
+  check_phoneno();
+  
+  if(error_username == false && error_password == false && error_retype_password == false && error_email == false&& error_date==false && error_phoneno==false) {
+    return true;
+  } else {
+    return false;	
+  }
+
+});
+
+});
+</script>
 
 </body>
 </html>

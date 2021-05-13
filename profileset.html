@@ -1,0 +1,79 @@
+
+<head>
+    <style>
+        .container
+        {
+            
+            background-color: pink;
+            margin-top: 90px;
+            height: 500px;
+            border:black 1px solid;
+        }
+    </style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+
+<title>profile</title>
+</head>
+
+<body>
+
+<div class="container col-4">
+
+<h1>My Profile</h1>
+
+<form id="registration_form" method="POST" action="/">
+  <div class="form-group">
+      <label for="form_username">Name</label>
+      <input type="text" class="form-control" id="form_username" name="name" placeholder="username" required>
+    </div>
+    
+  <div class="form-group">
+    <label for="form_email">Email address</label>
+    <input type="email" class="form-control" id="form_email" name="email" aria-describedby="emailHelp" placeholder="Email" required>
+    
+  </div>
+
+  <div class="form-group">
+    <label for="form_date">DOB</label>
+    <input type="date" class="form-control" id="form_date" name="date" required>
+  
+  </div>
+  <div class="form-group">
+    <label for="form_number">Phone no</label>
+    <input type="tel" class="form-control" id="form_number" name="number" placeholder="Phone no" required>
+  
+  </div>
+  <div class="form-group">
+    <label for="form_degree">Degree</label>
+    <input type="text" class="form-control" id="form_degree" name="degree" placeholder="degree" required>
+    
+  </div>
+  <div class="form-group">
+    <label for="form_desig">Designation</label>
+    <input type="text" class="form-control" id="form_desig" name="desig" placeholder="desig" required>
+    
+  </div>
+  
+  
+  
+  <br>
+
+  <button type="button" class="sbmt_btn btn-success" >Insert</button>
+  <button type="button" class="sbmt_btn btn-success" >Delete</button>
+  <button type="button" class="sbmt_btn btn-success" >Update</button>
+  <button type="button" class="sbmt_btn btn-success" >View</button>
+  
+
+  
+  
+</form>
+  </div>
+
+
+</div>
+
+
+</body>
+</html>

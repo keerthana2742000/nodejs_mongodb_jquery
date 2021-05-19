@@ -5,8 +5,8 @@
         {
             
             background-color: pink;
-            margin-top: 90px;
-            height: 550px;
+            margin-top: 60px;
+            height: 600px;
             border:black 1px solid;
         }
         span{
@@ -60,7 +60,7 @@
       <span class="error_form" id="phoneno_error_message"></span>
     </div><br>
 
-    <input type="submit" class="sbmt_btn btn-success" value="Register">
+    <input type="submit" class="sbmt_btn btn-success" onclick="validate()" value="Register">
     
     
   </form>
@@ -257,7 +257,31 @@ $("#registration_form").submit(function() {
 });
 
 });
+
+function validate()
+{
+
+const name=document.getElementById("form_username").value;
+    const email=document.getElementById("form_email").value;
+        const dob=document.getElementById("form_date").value;
+		const number=document.getElementById("form_number").value;
+		var dc = Date().substring(4,15);
+localStorage.setItem("DATECREATED",dc);
+
+
+        localStorage.setItem("NAME",name);
+        localStorage.setItem("EMAIL",email);
+        localStorage.setItem("DOB",dob);
+		localStorage.setItem("NUMBER",number);
+        return;
+		}
 </script>
+
+
+
+
+
+
 
 </body>
 </html>
